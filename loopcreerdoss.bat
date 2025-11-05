@@ -1,0 +1,1 @@
+for /F "delims=" %i in (noms.txt) do mkdir "%i"

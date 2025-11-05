@@ -1,0 +1,215 @@
+1. **Sciences et technologies**
+
+   * Mathématiques
+   * Physique
+   * Chimie
+   * Biologie
+   * Informatique
+   * Ingénierie (mécanique, électrique, civile, etc.)
+   * Sciences de la terre et environnement
+
+2. **Sciences humaines et sociales**
+
+   * Histoire
+   * Géographie
+   * Philosophie
+   * Sociologie
+   * Anthropologie
+   * Psychologie
+   * Science politique
+   * Économie
+   * Droit
+
+3. **Lettres, langues et arts**
+
+   * Littérature
+   * Linguistique
+   * Langues étrangères
+   * Traduction et interprétation
+   * Arts visuels (peinture, sculpture, design…)
+   * Musique
+   * Théâtre, danse, cinéma
+   * Communication et journalisme
+
+4. **Sciences de la santé**
+
+   * Médecine
+   * Pharmacie
+   * Odontologie (dentaire)
+   * Sciences infirmières
+   * Kinésithérapie
+   * Nutrition et diététique
+   * Santé publique
+
+5. **Sciences de gestion et commerce**
+
+   * Gestion
+   * Management
+   * Marketing
+   * Comptabilité
+   * Finance
+   * Ressources humaines
+   * Logistique
+   * Entrepreneuriat
+
+6. **Sciences de l’éducation**
+
+   * Pédagogie
+   * Didactique
+   * Formation des enseignants
+   * Technologies éducatives
+
+7. **Architecture et urbanisme**
+
+   * Architecture
+   * Urbanisme
+   * Aménagement du territoire
+   * Design urbain
+
+8. **Agronomie et sciences vétérinaires**
+
+   * Agriculture
+   * Agroalimentaire
+   * Foresterie
+   * Sciences animales
+   * Médecine vétérinaire
+
+9. **Sciences militaires et de la défense**
+
+   * Stratégie et sécurité
+   * Défense nationale
+   * Relations internationales appliquées
+
+10. **Sciences de l’information et documentation**
+
+* Bibliothéconomie
+* Archivistique
+* Documentation numérique
+
+11. **Tourisme, hôtellerie et loisirs**
+
+* Tourisme et patrimoine
+* Hôtellerie-restauration
+* Sport, loisirs et management sportif
+
+12. **Mode, design et artisanat**
+
+* Stylisme et modélisme
+* Design industriel
+* Métiers d’art et artisanat
+
+13. **Transports et aéronautique**
+
+* Navigation maritime
+* Aéronautique et astronautique
+* Transport et logistique
+
+14. **Énergies et développement durable**
+
+* Énergies renouvelables
+* Génie climatique
+* Transition écologique
+
+15. **Sciences forensiques et criminologie**
+
+* Criminologie
+* Police scientifique
+* Sécurité publique et privée
+
+15. **Sciences forensiques et criminologie**
+
+* Criminologie
+* Police scientifique
+* Sécurité publique et privée
+
+16. **Sciences de la communication**
+
+* Communication institutionnelle
+* Médias et journalisme
+* Publicité et marketing digital
+* Relations publiques
+
+17. **Sciences religieuses et théologie**
+
+* Études bibliques
+* Théologie comparée
+* Philosophie religieuse
+* Histoire des religions
+
+18. **Sciences maritimes**
+
+* Navigation et transport maritime
+* Océanographie
+* Gestion portuaire et logistique maritime
+* Pêche et aquaculture
+
+19. **Sciences sportives**
+
+* Physiologie de l’exercice
+* Kinésiologie
+* Management sportif
+* Entraînement et performance
+
+20. **Sciences culturelles et patrimoniales**
+
+* Muséologie
+* Archéologie
+* Conservation du patrimoine
+* Études culturelles et ethnologie
+
+21. **Énergies et développement durable**
+
+* Énergies renouvelables (solaire, éolienne, hydraulique…)
+* Gestion de l’énergie et efficacité énergétique
+* Transition écologique et climatologie
+* Ingénierie environnementale
+
+22. **Architecture et urbanisme**
+
+* Architecture durable
+* Urbanisme et aménagement du territoire
+* Design urbain et paysage
+* Restauration du patrimoine architectural
+
+23. **Agronomie et sciences vétérinaires**
+
+* Agriculture durable et agroécologie
+* Sciences animales et élevage
+* Médecine vétérinaire
+* Agroalimentaire et sécurité alimentaire
+
+24. **Transports et aéronautique**
+
+* Génie aéronautique
+* Transport terrestre et logistique
+* Gestion du trafic aérien
+* Navigation maritime et fluviale
+
+25. **Mode, design et artisanat**
+
+* Stylisme et modélisme
+* Design industriel et produit
+* Métiers d’art et artisanat
+* Bijouterie et joaillerie
+
+26. **Tourisme, hôtellerie et loisirs**
+
+* Gestion hôtelière
+* Tourisme culturel et patrimonial
+* Organisation d’événements et loisirs
+* Management sportif et récréatif
+
+27. **Sciences militaires et de la défense**
+
+* Stratégie et sécurité
+* Technologies de défense
+* Études géopolitiques
+* Logistique militaire
+
+28. **Sciences de l’information et documentation**
+
+* Bibliothéconomie
+* Archivistique
+* Gestion de l’information numérique
+* Informatique documentaire
+
