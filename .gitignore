@@ -15,3 +15,7 @@ venv/
 
 # Ignorer les fichiers de logs
 *.log
+
+.well-known/
+init/cequejapprend.txt
+documentationetétapes.txt
