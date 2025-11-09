@@ -1,6 +1,8 @@
+// use client pour la gestion avec 
+'use client' 
 import React, { useEffect, useState } from "react";
 import { getMainDom } from "../../api/mainDomApi";
-
+import Link from 'next/link'
 function MainDomList() {
   const [MainDom, setMainDom] = useState([]);
 
@@ -15,14 +17,15 @@ function MainDomList() {
 
   return (
     <div>
-      <h2>Liste des utilisateurs</h2>
+      <h2>Bienvenue</h2>
       <ul>
         {MainDom.map((u) => (
-          <li key={u.id}>{u.name}</li>
+          //<li key={u.id}>{u.lib}</li>
+          <Link key={u.id} href={u.lib}>{u.lib}</Link>
         ))}
       </ul>
     </div>
   );
 }
 
-export default MainDomList;
+export default MainDomList;   

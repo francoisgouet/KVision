@@ -1,3 +1,4 @@
+"use client";
 import React, { useEffect, useState } from "react";
 import MainDomList from "./features/mainDom/MainDomList";
 function App() {
@@ -12,10 +13,9 @@ function App() {
 
   return (
     <div>
-      <h1>React + Spring Boot</h1>
+      <h1>KVision</h1>
       <p>Message du backend : {message}</p>
-		
-	<MainDomList />
+	    <MainDomList />
 	</div>
   );
 }

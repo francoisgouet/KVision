@@ -50,3 +50,6 @@ yarn-error.log*
 /backend/mvnw.cmd
 /backend/.gitattributes
 .project
+tsconfig.json
+next-env.d.ts
+/.next/
