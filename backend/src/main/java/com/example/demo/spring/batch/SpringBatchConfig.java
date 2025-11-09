@@ -1,0 +1,206 @@
+package com.example.demo.spring.batch;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.Optional;
+import java.util.stream.Stream;
+
+import org.springframework.batch.core.Job;
+import org.springframework.batch.core.Step;
+import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
+import org.springframework.batch.core.job.builder.JobBuilder;
+import org.springframework.batch.core.repository.JobRepository;
+import org.springframework.batch.core.step.builder.StepBuilder;
+import org.springframework.batch.item.ItemProcessor;
+import org.springframework.batch.item.ItemReader;
+import org.springframework.batch.item.ItemWriter;
+import org.springframework.batch.item.file.FlatFileItemReader;
+import org.springframework.batch.item.support.ListItemReader;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.DuplicateKeyException;
+import org.springframework.transaction.PlatformTransactionManager;
+
+import com.example.demo.model.MainDom;
+import com.example.demo.repository.MainDomRepository;
+
+@Configuration
+@EnableBatchProcessing
+public class SpringBatchConfig {
+
+    //@Autowired
+    //private JobBuilder jobBuilder;
+
+    //@Autowired
+    //private StepBuilder stepBuilder;
+    
+    private final JobRepository jobRepository;
+    private final PlatformTransactionManager transactionManager;
+
+    // le repo
+    private final MainDomRepository mainDomRepository;
+    
+    public SpringBatchConfig(JobRepository jobRepository, PlatformTransactionManager transactionManager, MainDomRepository mainDomRepository) {
+        this.jobRepository = jobRepository;
+        this.transactionManager = transactionManager;
+		this.mainDomRepository = mainDomRepository;
+    }
+    
+    
+    @Bean
+    public ItemReader<MainDom> reader() {
+    	return new ListItemReader<>(mainDomRepository.findAll());
+    }
+    
+    @Bean
+    public FlatFileItemReader<String> fileReader() {
+        FlatFileItemReader<String> r = new FlatFileItemReader<>();
+        r.setResource(new FileSystemResource(Paths.get("../../domaines.txt"))); // fichier texte dans src/main/resources
+
+        // LineMapper très simple qui retourne la ligne entière comme String
+        r.setLineMapper((line, lineNumber) -> line);
+
+        return r;
+    }
+    
+    @Bean
+    public ItemProcessor<MainDom,MainDom> processor(MainDomRepository mainDomRepo) {
+        return item -> {
+            if (mainDomRepo.existsByLib(item.getLib())) {
+                return null; // ignorer les doublons
+            }
+            return item;
+        };
+    }
+
+
+    @Bean
+    public ItemWriter<MainDom> writerLineByLine() {
+    	return items -> {
+            for (MainDom p : items) {
+                try {
+                    mainDomRepository.save(p);
+                    
+                } catch (DataIntegrityViolationException e) {
+                    // Gestion du doublon : on logue et on continue le batch
+                    System.out.println("Doublon ignoré : " + p.getLib());
+                }
+            }
+        };
+    }
+    
+    @Bean
+    public ItemWriter<String> writerLineLineByLinev2() {
+    	return lines -> {
+    		//lines.forEach(null);
+            lines.forEach(line->{
+            	if (line.matches(".*\\d.*")) {
+					// Pattern pattern = Pattern.compile("[^\\*+]");
+
+					String[] fields = line.split("\\*");
+
+					// line = line.replaceAll("[0-9]","")
+					// .replaceAll("\\.","")
+					// .trim();
+					String number = line.replaceAll("^[0-9]", line);
+
+					MainDom mainDom = new MainDom();
+					mainDom.setLib(fields[2]);
+					
+					//saveProduct(mainDom);
+					try {
+						
+						Optional<MainDom> md_check = mainDomRepository.findByLib(mainDom.getLib());
+						String key = mainDom.getLib().toString().intern();
+						MainDom md_exists;
+						// synchronized (key) {
+						// Exists already?
+						if (md_check.isEmpty()) {
+							// New MainDom
+							md_exists = mainDomRepository.save(mainDom);
+						} else {
+							// Update existing md
+							md_exists = md_check.get();
+							// md_exists.setId(mainDom.getId());
+							md_exists.setLib(mainDom.getLib());
+							mainDomRepository.save(md_exists);
+						}
+
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						//e.printStackTrace();
+						System.out.println("sauver quand meme nn ?");
+					}
+				}
+            });
+    	};
+    }
+    
+    /*@Bean
+    public ItemWriter<MainDom> writer() {
+    	try (Stream<String> lines = Files.lines(Paths.get("../../domaines.txt"))) {
+			lines.forEach(line -> {
+				if (line.matches(".*\\d.*")) {
+					// Pattern pattern = Pattern.compile("[^\\*+]");
+
+					String[] fields = line.split("\\*");
+
+					// line = line.replaceAll("[0-9]","")
+					// .replaceAll("\\.","")
+					// .trim();
+					String number = line.replaceAll("^[0-9]", line);
+
+					MainDom mainDom = new MainDom();
+					mainDom.setLib(fields[2]);
+					
+					//saveProduct(mainDom);
+					try {
+						mainDomRepository.save(mainDom);
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
+				}
+			});
+		} catch (IOException e) {
+			throw new RuntimeException("Erreur lecture fichier text", e);
+		}
+
+        /*return items -> {
+            for (Product p : items) {
+                try {
+                    productRepository.save(p);
+                } catch (DataIntegrityViolationException e) {
+                    // Gestion du doublon : on logue et on continue le batch
+                    System.out.println("Doublon ignoré : " + p.getName());
+                }
+            }
+        };*/
+    //}
+
+    @Bean
+    public Step simpleStep() {
+        return new StepBuilder("simpleStep", jobRepository)
+                .<String, String>chunk(5, transactionManager)
+                .reader(fileReader())   // Exemple ItemReader simple
+                //.processor(processor(mainDomRepository))
+                .writer(writerLineLineByLinev2())
+                .faultTolerant()
+                .skip(DuplicateKeyException.class)
+                .skipLimit(0)
+                .build();
+    }
+
+    @Bean
+    public Job simpleJob() {
+        return new JobBuilder("simpleJob",jobRepository)
+                .start(simpleStep())
+                .build();
+    }
+}
