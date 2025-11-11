@@ -1,7 +1,10 @@
 package com.example.demo.controller;
 
-import com.example.demo.model.MainDom;
+import com.example.demo.model.MainDomDAO;
+import com.example.demo.model.MainDomDTO;
 import com.example.demo.repository.MainDomRepository;
+import com.fasterxml.jackson.databind.JsonNode;
+
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -10,23 +13,35 @@ import java.util.List;
 @RequestMapping("/api/maindom/")
 public class MainDomController {
 
-    private final MainDomRepository repo;
+	private final MainDomRepository repo;
 
-    public MainDomController(MainDomRepository repo) {
-        this.repo = repo;
-    }
+	public MainDomController(MainDomRepository repo) {
+		this.repo = repo;
+	}
 
-    public MainDomRepository getRepo() {
+	public MainDomRepository getRepo() {
 		return repo;
 	}
 
 	@GetMapping
-    public List<MainDom> getAllMainDom() {
-        return repo.findAll();
-    }
+	public List<MainDomDAO> getAllMainDom() {
+		return repo.findAll();
+	}
 
-    @PostMapping
-    public MainDom addUser(@RequestBody MainDom mainDom) {
-        return repo.save(mainDom);
-    }
+	@PostMapping
+	public MainDomDAO addUser(@RequestBody MainDomDAO mainDom) {
+		return repo.save(mainDom);
+	}
+
+	@GetMapping("/D3")
+	public JsonNode getAllMainDomD3() {
+		List<MainDomDAO> mainDomList = repo.findAll();
+		// parseJSonForD3(mainDomList);
+		return parseJSonForD3(mainDomList);
+	}
+
+	private JsonNode parseJSonForD3(List<MainDomDAO> mainDomDAOList) {
+		MainDomDTO mainDomDTO = new MainDomDTO();
+		return mainDomDTO.toD3format(mainDomDAOList);
+	}
 }

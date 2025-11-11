@@ -15,8 +15,8 @@ function App() {
     <div>
       <h1>KVision</h1>
       <p>Message du backend : {message}</p>
-	    <MainDomList />
-	</div>
+      <MainDomList />
+    </div>
   );
 }
 

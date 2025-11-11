@@ -1,14 +1,14 @@
 package com.example.demo.repository;
 
-import com.example.demo.model.MainDom;
+import com.example.demo.model.MainDomDAO;
 
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface MainDomRepository extends JpaRepository<MainDom, Long> {
+public interface MainDomRepository extends JpaRepository<MainDomDAO, Long> {
 
-	Optional<MainDom> findByLib(String lib);
+	Optional<MainDomDAO> findByLib(String lib);
 
 	boolean existsByLib(String lib);
 }

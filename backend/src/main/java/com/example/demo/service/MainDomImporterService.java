@@ -22,7 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.demo.model.MainDom;
+import com.example.demo.model.MainDomDAO;
 import com.example.demo.repository.MainDomRepository;
 
 @Transactional
@@ -31,11 +31,10 @@ public class MainDomImporterService {
 	// Service dédié à la lecture et au traitement des données
 
 	private final MainDomRepository mainDomRepository;
-	
+
 	public MainDomImporterService(MainDomRepository mainDomRepository) {
 		this.mainDomRepository = mainDomRepository;
 	}
-	
 
 	public void importFromText(Path pathToFile) {
 		try (Stream<String> lines = Files.lines(pathToFile)) {
@@ -47,9 +46,9 @@ public class MainDomImporterService {
 
 					String number = line.replaceAll("^[0-9]", line);
 
-					MainDom mainDom = new MainDom();
+					MainDomDAO mainDom = new MainDomDAO();
 					mainDom.setLib(fields[2]);
-					
+
 					try {
 						saveIfNotExists(mainDom);
 					} catch (Exception e) {
@@ -65,15 +64,15 @@ public class MainDomImporterService {
 	}
 
 	@Transactional
-	public Long saveIfNotExists(MainDom mainDom) {
+	public Long saveIfNotExists(MainDomDAO mainDom) {
 		// Vérifie si un client avec cet email existe déjà (email est unique)
-		Optional<MainDom> md_check = mainDomRepository.findByLib(mainDom.getLib());
+		Optional<MainDomDAO> md_check = mainDomRepository.findByLib(mainDom.getLib());
 		String key = mainDom.getLib().toString().intern();
-		MainDom md_exists;
+		MainDomDAO md_exists;
 		// synchronized (key) {
 		// Exists already?
 		if (md_check.isEmpty()) {
-			// New MainDom
+			// New MainDomDAO
 			md_exists = mainDomRepository.save(mainDom);
 		} else {
 			// Update existing md

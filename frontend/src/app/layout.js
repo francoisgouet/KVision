@@ -5,9 +5,9 @@ function LayoutPage({ children }) {
   
   return (
     <html>
-+      <body>{children}
-    <div>	    
-    </div>
+           <body>{children}
+    <>	    
+    </>
   </body>
   </html>
   );

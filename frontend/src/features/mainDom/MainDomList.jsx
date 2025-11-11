@@ -2,7 +2,9 @@
 'use client' 
 import React, { useEffect, useState } from "react";
 import { getMainDom } from "../../api/mainDomApi";
-import Link from 'next/link'
+import Link from 'next/link';
+
+
 function MainDomList() {
   const [MainDom, setMainDom] = useState([]);
 
