@@ -6,6 +6,7 @@ import Link from 'next/link';
 
 
 function MainDomList() {
+  
   const [MainDom, setMainDom] = useState([]);
 
   useEffect(() => {

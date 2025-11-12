@@ -3,7 +3,13 @@ package com.example.demo.service;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -22,35 +28,60 @@ public class MainDomImporterService {
 
 	private final DomRepository<AbstractDomDAO> domRepository;
 
-	public MainDomImporterService(@Qualifier("dom")DomRepository domRepository) {
+	private List<AbstractDomDAO> listEnfant;
+
+	public MainDomImporterService(@Qualifier("dom") DomRepository domRepository) {
 		this.domRepository = domRepository;
 	}
 
-	public void importFromText(Path pathToFile) {
-		try (Stream<String> lines = Files.lines(pathToFile)) {
-			lines.forEach(line -> {
-				if (!line.isEmpty()) {
-					if (line.matches(".*\\d.*")) {
-						// Pattern pattern = Pattern.compile("[^\\*+]");
+	public void ajouterEnfant(AbstractDomDAO subDomDAO) {
+		listEnfant.add(subDomDAO);
+	}
+	
+	
 
-						String[] fields = line.split("\\*");
-						String number = line.replaceAll("^[0-9]", line);
-						
-						MainDomDAO mainDom = new MainDomDAO();
-						mainDom.setLib(fields[2]);
-						saveIfNotExists(mainDom);
-					} else {
-						String subDomLib = line.split("\\*")[1];
-						SubDomDAO subDom = new SubDomDAO();
-						subDom.setLib(subDomLib);
-						saveIfNotExists(subDom);
-						
-					}
+	public void importFromText(Path pathToFile) throws IOException {
+		
+		
+		// les elemens à persister
+		Set<AbstractDomDAO> racines = new HashSet<>();
+		
+		Stream<String> lines = Files.lines(pathToFile);
+		
+		// AtomicReference permet de changer
+		// de "courant" dans la lambda de forEach (car une variable locale doit être
+		// finale ou effective-final).
+		AtomicReference<AbstractDomDAO> current = new AtomicReference<>();
+		lines.forEach(line -> {
+			if (!line.isEmpty()) {
+				if (line.matches(".*\\d.*")) {
+					// Pattern pattern = Pattern.compile("[^\\*+]");
+					String[] fields = line.split("\\*");
+					String number = line.replaceAll("^[0-9]", line);
+					MainDomDAO mainDom = new MainDomDAO();
+					mainDom.setLib(fields[2]);
+					//((AbstractDomDAO)mainDom).setParent(this);
+					racines.add(mainDom);
+					current.set(mainDom);
+					//current.get().setParent(current.get());
+					// saveIfNotExists(current);
+				} else {
+					String subDomLib = line.split("\\*")[1];
+					SubDomDAO subDom = new SubDomDAO();
+					subDom.setLib(subDomLib);
+					subDom.setParent(current.get());
+					current.get().addSubDom(subDom);
+					//current.get().setParent(current.get());
+					// saveIfNotExists(subDom);
 				}
-			});
-		} catch (IOException e) {
-			throw new RuntimeException("Erreur lecture fichier text", e);
+			}
+		});
+		try {
+			domRepository.saveAll(racines);	
+		} catch (Exception e) {
+			// TODO: handle exception
 		}
+		racines.forEach(r -> r.afficher(""));
 	}
 
 	@Transactional

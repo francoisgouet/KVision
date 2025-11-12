@@ -10,6 +10,6 @@ import com.example.demo.repository.DomRepository;
 
 @Repository("subdom")
 public interface SubDomRepo extends DomRepository<SubDomDAO> {
+	
 	List<SubDomDAO> findAll();
-
 }

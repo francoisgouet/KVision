@@ -1,13 +1,14 @@
 import * as d3 from 'd3';
-import { getMainDomD3 } from "../../../api/mainDomApi";
+import { getMainDomD3,getAllDomD3 } from "../../../api/mainDomApi";
 
-const datas = await getMainDomD3();
+const allMainDom = await getMainDomD3();
+const allDom = await getAllDomD3();
 
 var margin = { top: 20, right: 90, bottom: 30, left: 90 };
 const width = 400, height = 300;
 const treeLayout = d3.tree().size([height, width - 120]); // Définir la taille de l'arbre
 
-var root = d3.hierarchy(datas, d => d.children); // Créer une hiérarchie D3 à partir des données
+var root = d3.hierarchy(allMainDom, d => d.children); // Créer une hiérarchie D3 à partir des données
 var svg;
 
 function collapse(node) {
@@ -65,7 +66,7 @@ function D3Init(svgRef) {
     const viewBoxHeight = height - 2 * margin;
 
     svg = d3.select(svgRef.current)
-        .attr("viewBox", `0 0 ${viewBoxWidth} ${viewBoxHeight}`)
+        .attr("viewBox", `${margin.left} ${margin.top} ${width + 100} ${height + 100}`)
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
         .append("g")
@@ -99,14 +100,19 @@ function constructNodes(svg, nodes, source) {
         .append('g')
         .attr('class', 'node')
         .attr('transform', d => `translate(${d.y},${d.x})`)
-    //.on('click', click);
-
-    nodeEnter.append('circle')
-        .attr('r', 8)
-        .style('fill', d => d._children ? 'lightsteelblue' : '#c81a1aff')
         .on('click', click);
 
-    nodeEnter.append('text')
+    // balise a 
+    const nodeLink = nodeEnter.append('a')
+        .attr('xlink:href', d => (d.data.name != 'root'?d.data.name:"#")  || "#")    // définir l'URL (exemple : d.data.url si défini)
+        //.attr('target', '_blank');
+
+    nodeLink.append('circle')
+        .attr('r', 8)
+        .style('fill', d => d._children ? 'lightsteelblue' : '#c81a1aff')
+    //.on('click', click);
+
+    nodeLink.append('text')
         .attr('dy', 3)
         .attr('x', d => d.children || d._children ? -14 : 14)
         .attr('text-anchor', d => d.children || d._children ? "end" : "start")

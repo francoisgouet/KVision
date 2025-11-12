@@ -1,16 +1,24 @@
 package com.example.demo.domain.dom.daos;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.example.demo.domain.dom.AbstractDom;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorColumn;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 
@@ -22,9 +30,9 @@ import jakarta.persistence.Table;
 @Inheritance(strategy = InheritanceType.JOINED) // ou SINGLE_TABLE, TABLE_PER_CLASS
 //@DiscriminatorColumn(name = "type")
 public abstract class AbstractDomDAO extends AbstractDom {
-	
+
 	public static final String tableName = "dom";
-	
+
 	public AbstractDomDAO() {
 		super();
 		// pour que si on doit a l'avenir utilisé lib du parent
@@ -33,11 +41,19 @@ public abstract class AbstractDomDAO extends AbstractDom {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-    protected Long id;
+	protected Long id;
 
-	//@Column(unique = true)
+	@Column(name="lib",unique=true)
 	protected String lib;
 	// Garantit que deux domaines ne peuvent avoir le même lib
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "parent_id", nullable = true)
+	protected AbstractDomDAO domparent;
+
+	
+	@OneToMany(mappedBy = "domparent", cascade = CascadeType.ALL, orphanRemoval = true)
+    public List<AbstractDomDAO> subdom = new ArrayList<>();
 
 	public Long getId() {
 		return id;
@@ -56,4 +72,27 @@ public abstract class AbstractDomDAO extends AbstractDom {
 		super.lib = lib;
 	}
 
+	public AbstractDom getParent() {
+		return (AbstractDomDAO) this.domparent;
+	}
+
+	public void setParent(AbstractDom domparent) {
+		if (this instanceof MainDomDAO) {
+			
+		} else {
+			this.domparent = (AbstractDomDAO) domparent;	
+		}
+	}
+
+	public List<? extends AbstractDom> getEnfants() {
+		return subdom;
+	}
+
+	public void setEnfants(List<AbstractDomDAO> subDom) {
+		this.subdom = subDom;
+	}
+
+	public void addSubDom(AbstractDomDAO subDom) {
+		subdom.add(subDom);
+	}
 }

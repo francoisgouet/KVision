@@ -44,9 +44,9 @@ public class MainDomDTO extends AbstractDomDTO {
 		// childrenPropRootNodeKey=children ( pour eviter le code en dur )
 		String childrenPropRootNodeKey = ((Map.Entry<?, ?>) propertyRootNode).getKey().toString();
 
-		for (MainDomDAO currentMainDomDAO : (List<MainDomDAO>)listMainDomDAO) {
+		for (AbstractDomDAO abstractDomDAO : (List<MainDomDAO>)listMainDomDAO) {
 			MainDomDTO domDTO = new MainDomDTO();
-			domDTO.setName(currentMainDomDAO.getLib());
+			domDTO.setName(abstractDomDAO.getLib());
 			try {
 				mainDomAsJsonString = mapper.writeValueAsString(domDTO);
 				((ArrayNode) jsonNodeDomArr).add(mapper.readTree(mainDomAsJsonString));

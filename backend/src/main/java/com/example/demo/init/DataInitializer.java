@@ -1,5 +1,6 @@
 package com.example.demo.init;
 
+import java.io.IOException;
 import java.nio.file.Paths;
 
 import org.springframework.boot.ApplicationArguments;
@@ -19,7 +20,7 @@ public class DataInitializer implements ApplicationRunner {
 	}
 
 	@Override
-	public void run(ApplicationArguments args) {
+	public void run(ApplicationArguments args) throws IOException {
 		importService.importFromText(Paths.get("../domaines.txt"));
 	}
 }
