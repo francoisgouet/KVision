@@ -1,21 +1,31 @@
-package com.example.demo.model;
+package com.example.demo.domain.dom.dtos;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.example.demo.domain.dom.daos.AbstractDomDAO;
+import com.example.demo.domain.dom.daos.MainDomDAO;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
-public class MainDomDTO {
+public class MainDomDTO extends AbstractDomDTO {
 
+	@JsonProperty("name")
 	private String name;
+
+	@JsonProperty("children")
 	private List<String> children = new ArrayList();
 
-	public JsonNode toD3format(List<MainDomDAO> listMainDomDAO) {
+	@JsonIgnore
+	private String otherParam = "otherParam";
+
+	public JsonNode toD3format(List<? extends AbstractDomDAO> listMainDomDAO) {
 		// doit coresspondre aux D3
 		// {name:"":children:[]}
 		// mapper
@@ -30,10 +40,11 @@ public class MainDomDTO {
 		// rootNode Json
 		JsonNode rootNode = mapper.valueToTree(rootDom);
 		Object propertyRootNode = ((ObjectNode) rootNode).properties().toArray()[1];
+
 		// childrenPropRootNodeKey=children ( pour eviter le code en dur )
 		String childrenPropRootNodeKey = ((Map.Entry<?, ?>) propertyRootNode).getKey().toString();
 
-		for (MainDomDAO currentMainDomDAO : listMainDomDAO) {
+		for (MainDomDAO currentMainDomDAO : (List<MainDomDAO>)listMainDomDAO) {
 			MainDomDTO domDTO = new MainDomDTO();
 			domDTO.setName(currentMainDomDAO.getLib());
 			try {

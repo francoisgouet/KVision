@@ -74,6 +74,14 @@
         <artifactId>spring-boot-starter-batch</artifactId>
         <version>2.7.5</version> <!-- à adapter selon la version Spring Boot -->
     </dependency>
+    
+    <!--<dependency>
+    	<groupId>org.projectlombok</groupId>
+    	<artifactId>lombok</artifactId>
+    	<version>1.18.32</version>
+    	<scope>provided</scope>
+	</dependency>-->
+	
   </dependencies>
 
   <build>

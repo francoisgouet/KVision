@@ -21,8 +21,8 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.transaction.PlatformTransactionManager;
 
-import com.example.demo.model.MainDomDAO;
-import com.example.demo.repository.MainDomRepository;
+import com.example.demo.domain.dom.daos.MainDomDAO;
+import com.example.demo.repository.DomRepository;
 
 @Configuration
 @EnableBatchProcessing
@@ -34,14 +34,14 @@ public class SpringBatchConfig {
 	// @Autowired
 	// private StepBuilder stepBuilder;
 
-	private final JobRepository jobRepository;
+	/*private final JobRepository jobRepository;
 	private final PlatformTransactionManager transactionManager;
 
 	// le repo
-	private final MainDomRepository mainDomRepository;
+	private final DomRepository mainDomRepository;
 
 	public SpringBatchConfig(JobRepository jobRepository, PlatformTransactionManager transactionManager,
-			MainDomRepository mainDomRepository) {
+			DomRepository mainDomRepository) {
 		this.jobRepository = jobRepository;
 		this.transactionManager = transactionManager;
 		this.mainDomRepository = mainDomRepository;
@@ -64,7 +64,7 @@ public class SpringBatchConfig {
 	}
 
 	@Bean
-	public ItemProcessor<MainDomDAO, MainDomDAO> processor(MainDomRepository mainDomRepo) {
+	public ItemProcessor<MainDomDAO, MainDomDAO> processor(DomRepository mainDomRepo) {
 		return item -> {
 			if (mainDomRepo.existsByLib(item.getLib())) {
 				return null; // ignorer les doublons
@@ -88,9 +88,9 @@ public class SpringBatchConfig {
 		};
 	}
 
-	@Bean
+	/*@Bean
 	public ItemWriter<String> writerLineLineByLinev2() {
-		return lines -> {
+		/*return lines -> {
 			// lines.forEach(null);
 			lines.forEach(line -> {
 				if (line.matches(".*\\d.*")) {
@@ -116,7 +116,7 @@ public class SpringBatchConfig {
 						// Exists already?
 						if (md_check.isEmpty()) {
 							// New MainDomDAO
-							md_exists = mainDomRepository.save(mainDom);
+							md_exists = (MainDomDAO)mainDomRepository.save(mainDom);
 						} else {
 							// Update existing md
 							md_exists = md_check.get();
@@ -160,7 +160,7 @@ public class SpringBatchConfig {
 	 */
 	// }
 
-	@Bean
+	/*@Bean
 	public Step simpleStep() {
 		return new StepBuilder("simpleStep", jobRepository).<String, String>chunk(5, transactionManager)
 				.reader(fileReader()) // Exemple ItemReader simple
@@ -172,5 +172,5 @@ public class SpringBatchConfig {
 	@Bean
 	public Job simpleJob() {
 		return new JobBuilder("simpleJob", jobRepository).start(simpleStep()).build();
-	}
+	}*/
 }
